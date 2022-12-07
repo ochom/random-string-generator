@@ -6,14 +6,17 @@ import string
 import random
 import string
 
-from generator import random_string_with_special_characters
+# define all the characters
+all_chars = string.ascii_letters + string.digits + string.punctuation
 
 
 def is_quantifier(token) -> bool:
+    '''Check if the token is a quantifier.'''
     return (token.startswith('{') and token.endswith('}')) or token.endswith('*') or token.endswith('+') or token.endswith('?')
 
 
 def get_repeat(quantifier) -> int:
+    '''Get the number of times a token should be repeated.'''
     if quantifier == '*':
         return random.randint(0, 100)
     elif quantifier == '+':
@@ -41,79 +44,49 @@ def get_repeat(quantifier) -> int:
 
 
 def has_range(token) -> bool:
+    '''Check if the token has a range.'''
     # patter should be something like 0-9 or a-z or A-Z
-    pattern = r'\w-\w'
-    return re.match(pattern, token) is not None
+    return re.match(r'(\d-\d|[a-z]-[a-z]|[A-Z]-[A-Z])', token) is not None
 
 
-def get_ranges(token) -> str:
-    digits_range = ''
-    chars_range = ''
-    # pattern has a digits range
-    if re.match(r'\d-\d', token) is not None:
-        digits_in_range = re.findall(r'\d', token)
-        digits_range = string.digits[int(
-            digits_in_range[0]):int(digits_in_range[1]) + 1]
-
-    # pattern ascii letters range lowercase
-    if re.match(r'[a-z]-[a-z]', token) is not None:
-        chars_in_range = re.findall(r'[a-z]', token)
-        chars_range = string.ascii_lowercase[int(
-            chars_in_range[0]):int(chars_in_range[1]) + 1]
-
-    # pattern ascii letters range uppercase
-    if re.match(r'[A-Z]-[A-Z]', token) is not None:
-        chars_in_range = re.findall(r'[A-Z]', token)
-        chars_range = string.ascii_uppercase[int(
-            chars_in_range[0]):int(chars_in_range[1]) + 1]
-
-    # combine the ranges
-    return digits_range + chars_range
+def get_ranges(pattern) -> str:
+    '''Get all the characters that matches the token pattern.'''
+    pattern = f'[{pattern}]'
+    range = ''.join([char for char in all_chars if re.match(pattern, char)])
+    return range
 
 
 def get_negative_ranges(token) -> str:
+    '''Get all the characters that does not match the token pattern.'''
     ranges = get_ranges(token)
-    return ''.join([char for char in string.printable if char not in ranges])
+
+    # return all the characters that are not in the ranges
+    return ''.join([char for char in all_chars if char not in ranges])
 
 
 def create(token: str, repeat: int) -> str:
-    # if the token is a character class definition
+    '''Create a random string that matches the given token.'''
+
+    # check if token is not a character class definition
     if not token.startswith('['):
         if token == '.':
-            return random_string_with_special_characters() * repeat
+            return ''.join(random.choices(all_chars, k=repeat))
         else:
             return token * repeat
 
-    # if the token is a character class definition
     # remove the square brackets
     token = token[1:-1]
 
-    # if the token has no range
-    if not has_range(token):
-        # then generate a random string of the token
-        return ''.join(random.choices(token, k=repeat))
-
-    # otherwise, generate a random string of the range
+    # check if the token ends with a quantifier
     internal_repeat = 1
-
-    # if the token ends with a quantifier, then remove it
     if is_quantifier(token[-1]):
         quantifier = token[-1]
         internal_repeat = get_repeat(quantifier)
         token = token[:-1]
 
-    # if the token doest not start with a caret
-    if not token.startswith('^'):
-        # if the token has a range
-        if not has_range(token):
-            # then generate a random string of the token
-            return ''.join(random.choices(token, k=repeat * internal_repeat))
-        else:
-            # otherwise, generate a random string of the range
-            return ''.join(random.choices(get_ranges(token), k=repeat * internal_repeat))
-    else:
-        # remove the caret
+    # check if token starts with a caret
+    if token.startswith('^'):
         token = token[1:]
-
-        # generate random string of the negative range
         return ''.join(random.choices(get_negative_ranges(token), k=repeat * internal_repeat))
+    else:
+        return ''.join(random.choices(get_ranges(token), k=repeat * internal_repeat))
