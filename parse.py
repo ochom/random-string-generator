@@ -43,12 +43,6 @@ def get_repeat(quantifier) -> int:
             return int(quantifier)
 
 
-def has_range(token) -> bool:
-    '''Check if the token has a range.'''
-    # patter should be something like 0-9 or a-z or A-Z
-    return re.match(r'(\d-\d|[a-z]-[a-z]|[A-Z]-[A-Z])', token) is not None
-
-
 def get_ranges(pattern) -> str:
     '''Get all the characters that matches the token pattern.'''
     pattern = f'[{pattern}]'

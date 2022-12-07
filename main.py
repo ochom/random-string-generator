@@ -1,6 +1,6 @@
 import re
 
-from engine import is_quantifier, get_repeat, create
+from parse import is_quantifier, get_repeat, create
 
 
 def generate(regex: str) -> str:

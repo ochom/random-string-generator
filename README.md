@@ -9,13 +9,14 @@ Give this code a random regex expression and let it generate a string matching t
 ## Running the code
 
 ```bash
-$ python3 main.py <regex>
+$ python3 main.py
+Enter a regex: <regex>
 ```
 
 ### Example
 
 ```bash
-
-$ python3 main.py "/[a-z]{3,5}/"
-
+$ python3 main.py
+Enter a regex: /[a-z]{3,5}/
+doabl
 ```
