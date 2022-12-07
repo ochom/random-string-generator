@@ -1,6 +1,4 @@
 import re
-import random
-import string
 
 from engine import is_quantifier, get_repeat, create
 
@@ -47,10 +45,14 @@ def generate(regex: str) -> str:
 
 
 if __name__ == '__main__':
+
     patters = [
         '/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{8}/',
         '/[-+]?[0-9]{1,16}[.][0-9]{1,6}/',
+        '/.{8,12}/',
+        '/[^aeiouAEIOU0-9]{5}/',
+        '/[a-f-]{5}/'
     ]
 
     for pattern in patters:
-        print(f'Pattern: {pattern}, Generated: {generate(pattern)}')
+        print(f'\nPattern: {pattern} -> Generated: {generate(pattern)}\n')
