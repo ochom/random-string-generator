@@ -16,8 +16,3 @@ def test_generate():
         pattern = pattern[1:-1]
         assert re.match(
             pattern, result) is not None, f'"{result}" does not match {pattern}'
-
-
-if __name__ == '__main__':
-    test_generate()
-    print("All tests passed!")
