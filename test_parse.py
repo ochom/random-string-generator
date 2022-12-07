@@ -74,4 +74,8 @@ def test_create():
 
 if __name__ == '__main__':
     test_is_quantifier()
+    test_get_repeat()
+    test_get_ranges()
+    test_get_negative_ranges()
+    test_create()
     print("All tests passed!")
