@@ -77,16 +77,9 @@ def create(token: str, repeat: int) -> str:
     # remove the square brackets
     token = token[1:-1]
 
-    # check if the token ends with a quantifier
-    internal_repeat = 1
-    if is_quantifier(token[-1]):
-        quantifier = token[-1]
-        internal_repeat = get_repeat(quantifier)
-        token = token[:-1]
-
     # check if token starts with a caret
     if token.startswith('^'):
         token = token[1:]
-        return ''.join(random.choices(get_negative_ranges(token), k=repeat * internal_repeat))
+        return ''.join(random.choices(get_negative_ranges(token), k=repeat))
     else:
-        return ''.join(random.choices(get_ranges(token), k=repeat * internal_repeat))
+        return ''.join(random.choices(get_ranges(token), k=repeat))

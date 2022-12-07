@@ -45,14 +45,11 @@ def generate(regex: str) -> str:
 
 
 if __name__ == '__main__':
+    ''' From user input '''
+    regex = input('Enter a regex: ')
 
-    patters = [
-        '/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{8}/',
-        '/[-+]?[0-9]{1,16}[.][0-9]{1,6}/',
-        '/.{8,12}/',
-        '/[^aeiouAEIOU0-9]{5}/',
-        '/[a-f-]{5}/'
-    ]
+    # check if the entered value is a regex
+    if not regex.startswith('/') or not regex.endswith('/'):
+        raise Exception('Invalid regex')
 
-    for pattern in patters:
-        print(f'\nPattern: {pattern} -> Generated: {generate(pattern)}\n')
+    print(generate(regex))
