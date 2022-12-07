@@ -70,8 +70,3 @@ def test_create():
 
     for case in cases:
         assert re.match(case[0], case[1]), f'"{case[0]}" should be "{case[1]}"'
-
-
-if __name__ == '__main__':
-    test_is_quantifier()
-    print("All tests passed!")
